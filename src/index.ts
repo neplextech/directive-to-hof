@@ -6,7 +6,7 @@ import {
 
 export function esbuild(options: DirectiveTransformerOptions) {
   return {
-    name: 'esbuild-plugin-use-macro',
+    name: 'directive-to-hof',
     async setup(build: any) {
       const fileFilter = /\.(c|m|d)?(j|t)sx?$/;
       const transformer = createDirectiveTransformer(options);
