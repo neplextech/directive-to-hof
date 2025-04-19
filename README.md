@@ -1,3 +1,7 @@
+!["no runtime magic"](https://img.shields.io/badge/runtime-magic--free-success?style=flat-square)
+!["compiles like a boss"](https://img.shields.io/badge/compiles-like%20a%20boss-blueviolet?style=flat-square)
+!["pragmas are code too"](https://img.shields.io/badge/%22use%20once%22-actually%20means%20something-yellow?style=flat-square)
+
 # directive-to-hof
 
 Transform directives into a higher order function.
