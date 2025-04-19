@@ -85,6 +85,7 @@ const { contents } = await transformer(code, { path: import.meta.filename });
 
 console.log(contents);
 /*
+import { useOnce } from "./use-once-function.js"
 let count = 0;
 
 const increment = useOnce(() => {
