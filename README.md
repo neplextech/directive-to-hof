@@ -12,6 +12,12 @@ Transform directives into a higher order function.
 $ npm i directive-to-hof
 ```
 
+# Features
+
+- **No runtime magic**: The directive is transformed into a higher order function call.
+- **Compiles like a boss**: The directive is transformed into a higher order function call at build time.
+- **Pragmas are code too**: Treat directives as code. This means you can use them in any context where you would use a function call.
+
 # Usage
 
 ## Vite/Rollup Plugin

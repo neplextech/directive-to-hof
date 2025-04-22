@@ -44,9 +44,29 @@ export interface DirectiveTransformerOptions {
 export function createDirectiveTransformer(
   options: DirectiveTransformerOptions
 ) {
+  if (!options) {
+    throw new Error('Options are required');
+  }
+
+  if (!options.directive) {
+    throw new Error('Directive is required');
+  }
+
+  if (!options.importPath) {
+    throw new Error('Import path is required');
+  }
+
+  if (!options.importName) {
+    throw new Error('Import name is required');
+  }
+
+  if (typeof options.directive !== 'string') {
+    throw new Error('Directive must be a string');
+  }
+
   const IMPORT_PATH = options.importPath;
   const DIRECTIVE = options.directive;
-  const CACHE_IDENTIFIER = options.importName;
+  const IDENTIFIER = options.importName;
   const ASYNC_ONLY = options.asyncOnly ?? true;
 
   const transformer = async (source: string, args: any) => {
@@ -58,7 +78,7 @@ export function createDirectiveTransformer(
     let state = {
       needsImport: false,
       hasExistingImport: false,
-      cacheIdentifierName: CACHE_IDENTIFIER,
+      cacheIdentifierName: IDENTIFIER,
       modifications: [],
     };
 
@@ -66,9 +86,9 @@ export function createDirectiveTransformer(
     traverse(ast, {
       Program: {
         enter(path: any) {
-          const binding = path.scope.getBinding(CACHE_IDENTIFIER);
+          const binding = path.scope.getBinding(IDENTIFIER);
           if (binding) {
-            state.cacheIdentifierName = `${CACHE_IDENTIFIER}_${generateRandomString()}`;
+            state.cacheIdentifierName = `${IDENTIFIER}_${generateRandomString()}`;
           }
         },
       },
@@ -80,18 +100,18 @@ export function createDirectiveTransformer(
             (spec: any) =>
               t.isImportSpecifier(spec) &&
               // @ts-ignore
-              spec.imported.name === CACHE_IDENTIFIER
+              spec.imported.name === IDENTIFIER
           )
         ) {
           state.hasExistingImport = true;
-          if (state.cacheIdentifierName !== CACHE_IDENTIFIER) {
+          if (state.cacheIdentifierName !== IDENTIFIER) {
             // @ts-ignore
             state.modifications.push(() => {
               path.node.specifiers.forEach((spec: any) => {
                 if (
                   t.isImportSpecifier(spec) &&
                   // @ts-ignore
-                  spec.imported.name === CACHE_IDENTIFIER
+                  spec.imported.name === IDENTIFIER
                 ) {
                   spec.local.name = state.cacheIdentifierName;
                 }
@@ -191,7 +211,7 @@ export function createDirectiveTransformer(
             [
               t.importSpecifier(
                 t.identifier(state.cacheIdentifierName),
-                t.identifier(CACHE_IDENTIFIER)
+                t.identifier(IDENTIFIER)
               ),
             ],
             t.stringLiteral(IMPORT_PATH)

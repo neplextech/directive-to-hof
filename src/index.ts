@@ -29,7 +29,7 @@ export function rollup(options: DirectiveTransformerOptions) {
       const result = await transformer(code, { path: id });
 
       return {
-        code: result.contents,
+        code: result.contents as string,
         map: null,
       };
     },
